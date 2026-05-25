@@ -1,0 +1,60 @@
+name: Deploy Automator to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Execute Remote SSH Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          script: |
+            echo "--- Starting Deployment to Azure VM ---"
+            
+            # Resolve app directory dynamically or default to ~/linkedin
+            APP_DIR="/home/${{ secrets.VM_USERNAME }}/linkedin"
+            if [ ! -d "$APP_DIR" ]; then
+              echo "Error: Application directory $APP_DIR does not exist. Please clone the repository first."
+              exit 1
+            fi
+            
+            cd "$APP_DIR"
+            
+            # Fetch latest repository history
+            echo "Fetching latest changes..."
+            git fetch --all
+            
+            # Hard reset to ensure local changes are cleanly overridden by remote push
+            echo "Resetting branch to origin..."
+            git reset --hard origin/$(git branch --show-current)
+            
+            # Update Python dependencies in virtual environment
+            if [ -f "requirements.txt" ]; then
+              echo "Installing Python dependencies..."
+              ./venv/bin/pip install --upgrade pip
+              ./venv/bin/pip install -r requirements.txt
+            fi
+            
+            # Restart the background systemd service to pick up new code
+            echo "Restarting linkedin-automator system service..."
+            sudo systemctl restart linkedin-automator.service
+            
+            # Print short status report to ensure service is active and running
+            echo "Verifying service status..."
+            sudo systemctl status linkedin-automator.service --no-pager | head -n 15
+            
+            echo "--- Deployment Finished Successfully! ---"
