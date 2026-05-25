@@ -56,7 +56,7 @@ ssh -i /path/to/linkedin-bot-key.pem azureuser@<VM-PUBLIC-IP>
 On the VM terminal, run:
 ```bash
 # Clone your repository from GitHub
-git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME.git linkedin
+git clone https://github.com/Tandon07/linkedin-search.git linkedin
 
 # Enter the directory
 cd linkedin
