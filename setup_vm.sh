@@ -36,7 +36,7 @@ sudo apt-get update -y
 
 # 2. Install basic system dependencies
 echo -e "\n${YELLOW}[STEP 2] Installing essential system software...${NC}"
-sudo apt-get install -y python3 python3-pip python3-venv git curl unzip wget libxi6 libgconf-2-4 libnss3
+sudo apt-get install -y python3 python3-pip python3-venv git curl unzip wget libxi6 libnss3
 
 # 3. Install Google Chrome Stable (headless engine)
 echo -e "\n${YELLOW}[STEP 3] Installing Google Chrome Stable...${NC}"
