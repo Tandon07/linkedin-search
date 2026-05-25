@@ -53,8 +53,7 @@ fi
 # 4. Setup Python Virtual Environment
 echo -e "\n${YELLOW}[STEP 4] Setting up Python virtual environment...${NC}"
 if [ ! -d "${APP_DIR}/venv" ]; then
-    python3 -v &>/dev/null && PYTHON_BIN="python3" || PYTHON_BIN="python"
-    $PYTHON_BIN -m venv "${APP_DIR}/venv"
+    python3 -m venv "${APP_DIR}/venv"
     echo -e "${GREEN}[OK] Virtual environment created.${NC}"
 else
     echo -e "${GREEN}[OK] Virtual environment already exists.${NC}"
