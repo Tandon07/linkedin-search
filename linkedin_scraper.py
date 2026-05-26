@@ -63,6 +63,8 @@ def _build_driver(headless: bool = True) -> webdriver.Chrome:
     options = Options()
     if headless:
         options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--ignore-certificate-errors")
     options.add_argument("--log-level=3")  # Suppress noisy Chrome logs
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
